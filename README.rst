@@ -1,14 +1,9 @@
 ITKNDReg
 =================================
 
-.. |CircleCI| image:: https://circleci.com/gh/InsightSoftwareConsortium/ITKNDReg.svg?style=shield
-    :target: https://circleci.com/gh/InsightSoftwareConsortium/ITKNDReg
-
-.. |TravisCI| image:: https://travis-ci.org/InsightSoftwareConsortium/ITKNDReg.svg?branch=master
-    :target: https://travis-ci.org/InsightSoftwareConsortium/ITKNDReg
-
-.. |AppVeyor| image:: https://img.shields.io/appveyor/ci/vikramc1/itkndreg.svg
-    :target: https://ci.appveyor.com/project/vikramc1/itkndreg
+.. image:: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKHigherOrderAccurateGradient?branchName=master
+    :target: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_build/latest?definitionId=2&branchName=master
+    :alt: Build status
 
 =========== =========== ===========
    Linux      macOS       Windows
