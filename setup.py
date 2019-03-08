@@ -19,7 +19,7 @@ setup(
     packages=['itk'],
     package_dir={'itk': 'itk'},
     download_url=r'https://github.com/InsightSoftwareConsortium/ITKNDReg',
-    description=r'This is Neurodata's open-source Python package that performs affine and deformable (LDDMM) image registration.',
+    description=r'This is the Neurodata open-source Python package that performs affine and deformable (LDDMM) image registration.',
     long_description='Easiest way to use',
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
