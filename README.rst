@@ -1,7 +1,7 @@
 ITKNDReg
 =================================
 
-.. image:: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKHigherOrderAccurateGradient?branchName=master
+.. image:: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKNDReg?branchName=master
     :target: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_build/latest?definitionId=2&branchName=master
     :alt: Build status
 
