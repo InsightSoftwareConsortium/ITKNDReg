@@ -1,5 +1,22 @@
-#ifndef __itkMetamorphosisImageRegistrationMethodv4_hxx
-#define __itkMetamorphosisImageRegistrationMethodv4_hxx
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
+#ifndef itkMetamorphosisImageRegistrationMethodv4_hxx
+#define itkMetamorphosisImageRegistrationMethodv4_hxx
 #include "itkMetamorphosisImageRegistrationMethodv4.h"
 #include "vcl_legacy_aliases.h"
 
@@ -18,10 +35,10 @@ MetamorphosisImageRegistrationMethodv4()
   m_Gamma = 1.0;                      // 1
   this->SetLearningRate(1e-3);        // 1e-3
   this->SetMinLearningRate(1e-10);     // 1e-8
-  m_MinImageEnergyFraction = 0;  
+  m_MinImageEnergyFraction = 0;
   m_MinImageEnergy = 0;
   m_MaxImageEnergy = 0;
-  m_NumberOfTimeSteps = 10;           // 4 
+  m_NumberOfTimeSteps = 10;           // 4
   m_NumberOfIterations = 100;         // 20
   m_UseJacobian = true;
   m_UseBias = true;
@@ -37,11 +54,11 @@ MetamorphosisImageRegistrationMethodv4()
   m_Bias = VirtualImageType::New();                              // B
   m_VirtualImage = VirtualImageType::New();
 
-  typedef typename ImageMetricType::FixedImageGradientImageType::PixelType             FixedGradientPixelType;
+  using FixedGradientPixelType = typename ImageMetricType::FixedImageGradientImageType::PixelType;
   m_FixedImageConstantGradientFilter = FixedImageConstantGradientFilterType::New();
   m_FixedImageConstantGradientFilter->SetConstant(NumericTraits<FixedGradientPixelType>::One);
 
-  typedef typename ImageMetricType::MovingImageGradientImageType::PixelType             MovingGradientPixelType;
+  using MovingGradientPixelType = typename ImageMetricType::MovingImageGradientImageType::PixelType;
   m_MovingImageConstantGradientFilter = MovingImageConstantGradientFilterType::New();
   m_MovingImageConstantGradientFilter->SetConstant(NumericTraits<MovingGradientPixelType>::One);
 
@@ -54,19 +71,19 @@ MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 ApplyKernel(TimeVaryingImagePointer kernel, TimeVaryingImagePointer image)
 {
   // Calculate the Fourier transform of image.
-  typedef ForwardFFTImageFilter<TimeVaryingImageType>    FFTType;
+  using FFTType = ForwardFFTImageFilter<TimeVaryingImageType>;
   typename FFTType::Pointer                     fft = FFTType::New();
   fft->SetInput(image);
 
   //...multiply it by the kernel...
-  typedef typename FFTType::OutputImageType  ComplexImageType;
-  typedef MultiplyImageFilter<ComplexImageType,TimeVaryingImageType,ComplexImageType>      ComplexImageMultiplierType;
+  using ComplexImageType = typename FFTType::OutputImageType;
+  using ComplexImageMultiplierType = MultiplyImageFilter<ComplexImageType,TimeVaryingImageType,ComplexImageType>;
   typename ComplexImageMultiplierType::Pointer  multiplier = ComplexImageMultiplierType::New();
-  multiplier->SetInput1(fft->GetOutput());		// Fourier-Transform of image
-  multiplier->SetInput2(kernel);			// Kernel
+  multiplier->SetInput1(fft->GetOutput());    // Fourier-Transform of image
+  multiplier->SetInput2(kernel);      // Kernel
 
   // ...and finaly take the inverse Fourier transform.
-  typedef InverseFFTImageFilter<ComplexImageType,TimeVaryingImageType>  IFFTType;
+  using IFFTType = InverseFFTImageFilter<ComplexImageType,TimeVaryingImageType>;
   typename IFFTType::Pointer                    ifft = IFFTType::New();
   ifft->SetInput(multiplier->GetOutput());
   ifft->Update();
@@ -80,12 +97,12 @@ MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 ApplyKernel(TimeVaryingImagePointer kernel, TimeVaryingFieldPointer field)
 {
   // Apply kernel to each component of field
-  typedef ComposeImageFilter<TimeVaryingImageType,TimeVaryingFieldType>   ComponentComposerType;
+  using ComponentComposerType = ComposeImageFilter<TimeVaryingImageType,TimeVaryingFieldType>;
   typename ComponentComposerType::Pointer   componentComposer = ComponentComposerType::New();
 
   for(unsigned int i = 0; i < ImageDimension; i++)
   {
-    typedef VectorIndexSelectionCastImageFilter<TimeVaryingFieldType,TimeVaryingImageType>    ComponentExtractorType;
+    using ComponentExtractorType = VectorIndexSelectionCastImageFilter<TimeVaryingFieldType,TimeVaryingImageType>;
     typename ComponentExtractorType::Pointer      componentExtractor = ComponentExtractorType::New();
     componentExtractor->SetInput(field);
     componentExtractor->SetIndex(i);
@@ -117,13 +134,13 @@ InitializeKernels(TimeVaryingImagePointer kernel, TimeVaryingImagePointer invers
   inverseKernel->SetRegions(region);
   inverseKernel->Allocate();
 
-  typedef ImageRegionIteratorWithIndex<TimeVaryingImageType>         TimeVaryingImageIteratorType;
+  using TimeVaryingImageIteratorType = ImageRegionIteratorWithIndex<TimeVaryingImageType>;
   TimeVaryingImageIteratorType KIt(kernel,kernel->GetLargestPossibleRegion());
   TimeVaryingImageIteratorType LIt(inverseKernel,inverseKernel->GetLargestPossibleRegion());
 
   for(KIt.GoToBegin(), LIt.GoToBegin(); !KIt.IsAtEnd(); ++KIt,++LIt)
   {
-    typename TimeVaryingImageType::IndexType  k = KIt.GetIndex();	// Get the frequency index
+    typename TimeVaryingImageType::IndexType  k = KIt.GetIndex();  // Get the frequency index
     double  A, B;
 
     // For every dimension accumulate the sum in A
@@ -183,10 +200,10 @@ Initialize()
   FFT runs most efficiently when each diminsion's size has a small prime factorization.
   Therefore we pad the velocity so that this condition is met.
   */
-  typedef ForwardFFTImageFilter<TimeVaryingImageType> FFTType;
+  using FFTType = ForwardFFTImageFilter<TimeVaryingImageType>;
   unsigned int greatestPrimeFactor = FFTType::New()->GetSizeGreatestPrimeFactor();
 
-  typedef FFTPadImageFilter<TimeVaryingFieldType> PadderType;
+  using PadderType = FFTPadImageFilter<TimeVaryingFieldType>;
   typename PadderType::Pointer padder = PadderType::New();
   padder->SetSizeGreatestPrimeFactor(vnl_math_min((unsigned int)5, greatestPrimeFactor));
   padder->SetInput(velocity);
@@ -252,15 +269,15 @@ Initialize()
   m_Bias->FillBuffer(NumericTraits<VirtualPixelType>::Zero);
 
   // Initialize forward image I(1)
-  typedef CastImageFilter<MovingImageType, VirtualImageType> MovingCasterType;
+  using MovingCasterType = CastImageFilter<MovingImageType, VirtualImageType>;
   typename MovingCasterType::Pointer movingCaster = MovingCasterType::New();
   movingCaster->SetInput(this->GetMovingImage());
   movingCaster->Update();
   m_ForwardImage = movingCaster->GetOutput();
 
   // Initialize forward mask M(1)
-  ImageMetricPointer metric = dynamic_cast<ImageMetricType *>(this->m_Metric.GetPointer()); 
-  typedef SpatialObjectToImageFilter<MaskType, MaskImageType> MaskToImageType;
+  ImageMetricPointer metric = dynamic_cast<ImageMetricType *>(this->m_Metric.GetPointer());
+  using MaskToImageType = SpatialObjectToImageFilter<MaskType, MaskImageType>;
   if(metric->GetMovingImageMask())
   {
     typename MaskToImageType::Pointer maskToImage = MaskToImageType::New();
@@ -274,12 +291,12 @@ Initialize()
     maskToImage->Update();
 
     m_MovingMaskImage = maskToImage->GetOutput(); // M_0
-    
-    typedef ImageDuplicator<MaskImageType> DuplicatorType;
+
+    using DuplicatorType = ImageDuplicator<MaskImageType>;
     typename DuplicatorType::Pointer duplicator = DuplicatorType::New();
     duplicator->SetInputImage(m_MovingMaskImage);
     duplicator->Update();
-    
+
     m_ForwardMaskImage = duplicator->GetModifiableOutput(); // M(1) = M_0
   }
 
@@ -314,15 +331,15 @@ Initialize()
   m_NumberOfTimeSteps = velocity->GetLargestPossibleRegion().GetSize()[ImageDimension]; // J
   m_TimeStep = 1.0/(m_NumberOfTimeSteps - 1); // \Delta t
   m_RecalculateEnergy = true; // v and r have been initialized
-  
-  typedef CastImageFilter<FixedImageType, VirtualImageType>  FixedCasterType;
+
+  using FixedCasterType = CastImageFilter<FixedImageType, VirtualImageType>;
   typename FixedCasterType::Pointer fixedCaster = FixedCasterType::New();
   fixedCaster->SetInput(this->GetFixedImage());
   fixedCaster->Update();
-  
+
   m_MinImageEnergy = GetImageEnergy(fixedCaster->GetOutput(), fixedMask);
   m_MaxImageEnergy = GetImageEnergy();
-  
+
   // Disable bias correction if \mu = 0
   if(m_Mu < NumericTraits<double>::epsilon()){ m_UseBias = false; }
 
@@ -334,11 +351,11 @@ double
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 CalculateNorm(TimeVaryingImagePointer image)
 {
-  typedef StatisticsImageFilter<TimeVaryingImageType> CalculatorType;
+  using CalculatorType = StatisticsImageFilter<TimeVaryingImageType>;
   typename CalculatorType::Pointer calculator = CalculatorType::New();
   calculator->SetInput(image);
   calculator->Update();
-  
+
   // sumOfSquares = (var(x) + mean(x)^2)*length(x)
   double sumOfSquares = (calculator->GetVariance()+vcl_pow(calculator->GetMean(),2))*image->GetLargestPossibleRegion().GetNumberOfPixels();
   return vcl_sqrt(sumOfSquares*m_VoxelVolume*m_TimeStep);
@@ -349,7 +366,7 @@ double
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 CalculateNorm(TimeVaryingFieldPointer field)
 {
-  typedef VectorMagnitudeImageFilter<TimeVaryingFieldType,TimeVaryingImageType> MagnitudeFilterType;
+  using MagnitudeFilterType = VectorMagnitudeImageFilter<TimeVaryingFieldType,TimeVaryingImageType>;
   typename MagnitudeFilterType::Pointer magnitudeFilter = MagnitudeFilterType::New();
   magnitudeFilter->SetInput(field);
   magnitudeFilter->Update();
@@ -379,7 +396,7 @@ GetLength()
     index[ImageDimension] = j;
     region.SetIndex(index);
 
-    typedef ExtractImageFilter<TimeVaryingFieldType, TimeVaryingFieldType> ExtractorType;
+    using ExtractorType = ExtractImageFilter<TimeVaryingFieldType, TimeVaryingFieldType>;
     typename ExtractorType::Pointer extractor = ExtractorType::New();
     extractor->SetInput(velocity);                    // v
     extractor->SetExtractionRegion(region);
@@ -420,13 +437,13 @@ template<typename TFixedImage, typename TMovingImage>
 double
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 GetImageEnergy(VirtualImagePointer movingImage, MaskPointer movingMask)
-{    
-  typedef CastImageFilter<VirtualImageType, MovingImageType> CasterType;
+{
+  using CasterType = CastImageFilter<VirtualImageType, MovingImageType>;
   typename CasterType::Pointer caster = CasterType::New();
   caster->SetInput(movingImage);                            // I(1)
   caster->Update();
 
-  ImageMetricPointer metric = dynamic_cast<ImageMetricType *>(this->m_Metric.GetPointer()); 
+  ImageMetricPointer metric = dynamic_cast<ImageMetricType *>(this->m_Metric.GetPointer());
   metric->SetFixedImage(this->GetFixedImage());        // I_1
   metric->SetFixedImageGradientFilter(DefaultFixedImageGradientFilterType::New());
   metric->SetMovingImage(caster->GetOutput());
@@ -434,7 +451,7 @@ GetImageEnergy(VirtualImagePointer movingImage, MaskPointer movingMask)
   metric->SetMovingImageMask(movingMask);
   metric->SetVirtualDomainFromImage(m_VirtualImage);
   metric->Initialize();
-  
+
   return 0.5*vcl_pow(m_Sigma,-2) * metric->GetValue() * metric->GetNumberOfValidPoints() * m_VoxelVolume;         // 0.5 \sigma^{-2} ||I(1) - I_1||
 }
 
@@ -442,7 +459,7 @@ template<typename TFixedImage, typename TMovingImage>
 double
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 GetImageEnergy()
-{ 
+{
   MaskPointer forwardMask;
   if(m_ForwardMaskImage)
   {
@@ -496,18 +513,18 @@ IntegrateRate()
     index[ImageDimension] = j-1;
     region.SetIndex(index);
 
-    typedef ExtractImageFilter<TimeVaryingImageType,VirtualImageType> ExtractorType;
+    using ExtractorType = ExtractImageFilter<TimeVaryingImageType,VirtualImageType>;
     typename ExtractorType::Pointer extractor = ExtractorType::New();
     extractor->SetInput(m_Rate);                    // r
     extractor->SetExtractionRegion(region);
     extractor->SetDirectionCollapseToIdentity();
 
-    typedef MultiplyImageFilter<VirtualImageType,VirtualImageType> MultiplierType;
+    using MultiplierType = MultiplyImageFilter<VirtualImageType,VirtualImageType>;
     typename MultiplierType::Pointer  multiplier = MultiplierType::New();
     multiplier->SetInput(extractor->GetOutput());   // r(j-1)
     multiplier->SetConstant(m_TimeStep);            // \Delta t
 
-    typedef AddImageFilter<VirtualImageType> AdderType;
+    using AdderType = AddImageFilter<VirtualImageType>;
     typename AdderType::Pointer adder = AdderType::New();
     adder->SetInput1(multiplier->GetOutput());      // r(j-1) \Delta t
     adder->SetInput2(m_Bias);                       // B(j-1)
@@ -517,8 +534,8 @@ IntegrateRate()
     this->m_OutputTransform->SetUpperTimeBound((j-1) * m_TimeStep); // t_{j-1}
     this->m_OutputTransform->IntegrateVelocityField();
 
-    typedef WrapExtrapolateImageFunction<VirtualImageType, RealType>         ExtrapolatorType;
-    typedef ResampleImageFilter<VirtualImageType,VirtualImageType,RealType>  ResamplerType;
+    using ExtrapolatorType = WrapExtrapolateImageFunction<VirtualImageType, RealType>;
+    using ResamplerType = ResampleImageFilter<VirtualImageType,VirtualImageType,RealType>;
     typename ResamplerType::Pointer  resampler = ResamplerType::New();
     resampler->SetInput(adder->GetOutput());                    // r(j-1) \Delta t + B(j-1)
     resampler->SetTransform(this->m_OutputTransform);           // \phi_{j,j-1}
@@ -536,7 +553,7 @@ typename MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::Bias
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 GetBias()
 {
-  typedef ResampleImageFilter<VirtualImageType, BiasImageType, RealType>  ResamplerType;
+  using ResamplerType = ResampleImageFilter<VirtualImageType, BiasImageType, RealType>;
   typename ResamplerType::Pointer resampler = ResamplerType::New();
   resampler->SetInput(m_Bias);   // B(1)
   resampler->UseReferenceImageOn();
@@ -566,11 +583,11 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
   }
 
   /* Compute metric derivative p(t) \nabla I(t) */
-  typedef DisplacementFieldTransform<RealType,ImageDimension> DisplacementFieldTransformType;
+  using DisplacementFieldTransformType = DisplacementFieldTransform<RealType,ImageDimension>;
   typename DisplacementFieldTransformType::Pointer fieldTransform = DisplacementFieldTransformType::New();
   fieldTransform->SetDisplacementField(field); // \phi_{t1}
 
-  typedef CastImageFilter<VirtualImageType, MovingImageType> CasterType;
+  using CasterType = CastImageFilter<VirtualImageType, MovingImageType>;
   typename CasterType::Pointer caster = CasterType::New();
   caster->SetInput(m_ForwardImage); // I(1)
   caster->Update();
@@ -582,7 +599,7 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
     forwardMask->SetImage(m_ForwardMaskImage);
   }
 
-  ImageMetricPointer metric = dynamic_cast<ImageMetricType*>(this->m_Metric.GetPointer()); 
+  ImageMetricPointer metric = dynamic_cast<ImageMetricType*>(this->m_Metric.GetPointer());
   metric->SetFixedImage(this->GetFixedImage());                    // I_1
   metric->SetFixedTransform(fieldTransform);                       // \phi_{t1}
   metric->SetFixedImageGradientFilter(fixedImageGradientFilter);   // \nabla I_1
@@ -591,7 +608,7 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
   metric->SetMovingImageGradientFilter(movingImageGradientFilter); // \nabla I_0
   metric->SetMovingImageMask(forwardMask);
   metric->SetVirtualDomainFromImage(m_VirtualImage);
-  metric->Initialize(); 
+  metric->Initialize();
 
   // Setup metric derivative
   typename MetricDerivativeType::SizeValueType metricDerivativeSize = m_VirtualImage->GetLargestPossibleRegion().GetNumberOfPixels() * ImageDimension;
@@ -604,7 +621,7 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
 
   SizeValueType numberOfPixelsPerTimeStep = m_VirtualImage->GetLargestPossibleRegion().GetNumberOfPixels();
 
-  typedef ImportImageFilter<VectorType, ImageDimension> ImporterType;
+  using ImporterType = ImportImageFilter<VectorType, ImageDimension>;
   typename ImporterType::Pointer importer = ImporterType::New();
   importer->SetImportPointer(metricDerivativePointer, numberOfPixelsPerTimeStep, false);
   importer->SetRegion(m_VirtualImage->GetLargestPossibleRegion());
@@ -613,16 +630,16 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
   importer->SetDirection(m_VirtualImage->GetDirection());
   importer->Update();
 
-  FieldPointer metricDerivativeField = importer->GetOutput();    
+  FieldPointer metricDerivativeField = importer->GetOutput();
 
-  // ITK dense transforms always return identity for jacobian with respect to parameters.  
+  // ITK dense transforms always return identity for jacobian with respect to parameters.
   // ... so we provide an option to use it here.
 
-  typedef MultiplyImageFilter<FieldType,VirtualImageType>  FieldMultiplierType;
+  using FieldMultiplierType = MultiplyImageFilter<FieldType,VirtualImageType>;
 
   if(m_UseJacobian)
   {
-    typedef DisplacementFieldJacobianDeterminantFilter<FieldType,RealType,VirtualImageType>  JacobianDeterminantFilterType;
+    using JacobianDeterminantFilterType = DisplacementFieldJacobianDeterminantFilter<FieldType,RealType,VirtualImageType>;
     typename JacobianDeterminantFilterType::Pointer jacobianDeterminantFilter = JacobianDeterminantFilterType::New();
     jacobianDeterminantFilter->SetInput(this->m_OutputTransform->GetDisplacementField()); // \phi_{t1}
 
@@ -638,7 +655,7 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
   multiplier1->SetInput(metricDerivativeField);  // -dM(I(1) o \phi{t1}, I_1 o \phi{t1})
   multiplier1->SetConstant(vcl_pow(m_Sigma,-2)); // 0.5 \sigma^{-2}
   multiplier1->Update();
-  
+
   return multiplier1->GetOutput(); // p(t) \nabla I(t) = p(1, \phi{t1})  \nabla I(1, \phi{t1}) = -0.5 \sigma^{-2} -dM(I(1) o \phi{t1}, I_1 o \phi{t1})
 }
 
@@ -647,10 +664,10 @@ void
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 UpdateControls()
 {
-  typedef JoinSeriesImageFilter<FieldType,TimeVaryingFieldType> FieldJoinerType;
+  using FieldJoinerType = JoinSeriesImageFilter<FieldType,TimeVaryingFieldType>;
   typename FieldJoinerType::Pointer velocityJoiner = FieldJoinerType::New();
 
-  typedef JoinSeriesImageFilter<VirtualImageType,TimeVaryingImageType> ImageJoinerType;
+  using ImageJoinerType = JoinSeriesImageFilter<VirtualImageType,TimeVaryingImageType>;
   typename ImageJoinerType::Pointer rateJoiner = ImageJoinerType::New();
 
   // For each time step
@@ -671,14 +688,14 @@ UpdateControls()
       this->m_OutputTransform->SetUpperTimeBound(1.0);
       this->m_OutputTransform->IntegrateVelocityField();
     }
-    
+
     //std::cout<<"After integrate"<<std::endl; /***/
     velocityJoiner->PushBackInput(GetMetricDerivative(this->m_OutputTransform->GetDisplacementField(), true)); // p(t) \nabla I(t) =  p(1, \phi{t1})  \nabla I(1, \phi{t1})
     //std::cout<<"After compute derivative"<<std::endl; /***/
 
     if(m_UseBias)
     {
-      typedef VectorIndexSelectionCastImageFilter<FieldType, VirtualImageType> ComponentExtractorType;
+      using ComponentExtractorType = VectorIndexSelectionCastImageFilter<FieldType, VirtualImageType>;
       typename ComponentExtractorType::Pointer componentExtractor = ComponentExtractorType::New();
       componentExtractor->SetInput(GetMetricDerivative(this->m_OutputTransform->GetDisplacementField(), false)); // p(t) [1,1,1] = p(t) \nabla I(t) [1,1,1]
       componentExtractor->SetIndex(0);
@@ -692,7 +709,7 @@ UpdateControls()
 
   // Compute velocity energy gradient, \nabla_V E = v + K_V [p \nabla I]
   //std::cout<<"Before Apply Kernel"<<std::endl;  /***/
-  typedef AddImageFilter<TimeVaryingFieldType> TimeVaryingFieldAdderType;
+  using TimeVaryingFieldAdderType = AddImageFilter<TimeVaryingFieldType>;
   typename TimeVaryingFieldAdderType::Pointer adder0 = TimeVaryingFieldAdderType::New();
   adder0->SetInput1(this->m_OutputTransform->GetVelocityField());                 // v
   adder0->SetInput2(ApplyKernel(m_VelocityKernel,velocityJoiner->GetOutput()));   // K_V[p \nabla I]
@@ -701,8 +718,8 @@ UpdateControls()
   //std::cout<<"After Apply Kernel"<<std::endl; /***/
 
   // Compute rate energy gradient \nabla_r E = r - \mu^2 K_R[p]
-  typedef MultiplyImageFilter<TimeVaryingImageType,TimeVaryingImageType>  TimeVaryingImageMultiplierType;
-  typedef AddImageFilter<TimeVaryingImageType>                            TimeVaryingImageAdderType;
+  using TimeVaryingImageMultiplierType = MultiplyImageFilter<TimeVaryingImageType,TimeVaryingImageType>;
+  using TimeVaryingImageAdderType = AddImageFilter<TimeVaryingImageType>;
   TimeVaryingImagePointer rateEnergyGradient;
   if(m_UseBias)
   {
@@ -729,7 +746,7 @@ UpdateControls()
   while(this->GetLearningRate() > m_MinLearningRate && GetImageEnergyFraction() > m_MinImageEnergyFraction)
   {
     // Update velocity, v = v - \epsilon \nabla_V E
-    typedef MultiplyImageFilter<TimeVaryingFieldType,TimeVaryingImageType>  TimeVaryingFieldMultiplierType;
+    using TimeVaryingFieldMultiplierType = MultiplyImageFilter<TimeVaryingFieldType,TimeVaryingImageType>;
     typename TimeVaryingFieldMultiplierType::Pointer multiplier2 = TimeVaryingFieldMultiplierType::New();
     multiplier2->SetInput(velocityEnergyGradient);                   // \nabla_V E
     multiplier2->SetConstant(-this->GetLearningRate());              // -\epsilon
@@ -747,13 +764,13 @@ UpdateControls()
     this->m_OutputTransform->SetUpperTimeBound(0.0);
     this->m_OutputTransform->IntegrateVelocityField();
 
-    typedef DisplacementFieldTransform<RealType,ImageDimension> DisplacementFieldTransformType;
+    using DisplacementFieldTransformType = DisplacementFieldTransform<RealType,ImageDimension>;
     typename DisplacementFieldTransformType::Pointer transform = DisplacementFieldTransformType::New();
     transform->SetDisplacementField(this->m_OutputTransform->GetDisplacementField()); // \phi_{t1}
-   
+
     // Compute forward image I(1) = I_0 o \phi_{10} + B(1)
-    typedef WrapExtrapolateImageFunction<MovingImageType, RealType>         ExtrapolatorType;
-    typedef ResampleImageFilter<MovingImageType,VirtualImageType,RealType>  MovingResamplerType;
+    using ExtrapolatorType = WrapExtrapolateImageFunction<MovingImageType, RealType>;
+    using MovingResamplerType = ResampleImageFilter<MovingImageType,VirtualImageType,RealType>;
     typename MovingResamplerType::Pointer resampler = MovingResamplerType::New();
     resampler->SetInput(this->GetMovingImage());   // I_0
     resampler->SetTransform(transform);            // \phi_{t0}
@@ -763,18 +780,18 @@ UpdateControls()
     resampler->Update();
 
     m_ForwardImage = resampler->GetOutput();       // I_0 o \phi_{10}
-    
-    // Compute forward mask M(1) = M_0 o \phi{1_0} 
+
+    // Compute forward mask M(1) = M_0 o \phi{1_0}
     if(m_ForwardMaskImage)
     {
-      typedef NearestNeighborInterpolateImageFunction<MaskImageType, RealType>      MaskInterpolatorType;
+      using MaskInterpolatorType = NearestNeighborInterpolateImageFunction<MaskImageType, RealType>;
       typename MaskInterpolatorType::Pointer maskInterpolator = MaskInterpolatorType::New();
 
-      typedef WrapExtrapolateImageFunction<MaskImageType, RealType>         MaskExtrapolatorType;
+      using MaskExtrapolatorType = WrapExtrapolateImageFunction<MaskImageType, RealType>;
       typename MaskExtrapolatorType::Pointer maskExtrapolator = MaskExtrapolatorType::New();
       maskExtrapolator->SetInterpolator(maskInterpolator);
 
-      typedef ResampleImageFilter<MaskImageType,MaskImageType,RealType>  MaskResamplerType;
+      using MaskResamplerType = ResampleImageFilter<MaskImageType,MaskImageType,RealType>;
       typename MaskResamplerType::Pointer maskResampler = MaskResamplerType::New();
       maskResampler->SetInput(m_MovingMaskImage);  // M_0
       maskResampler->SetTransform(transform);      // \phi_{10}
@@ -784,9 +801,9 @@ UpdateControls()
       maskResampler->SetExtrapolator(maskExtrapolator);
       maskResampler->Update();
 
-      m_ForwardMaskImage = maskResampler->GetOutput(); // M_0 o \phi_{10} 
+      m_ForwardMaskImage = maskResampler->GetOutput(); // M_0 o \phi_{10}
     }
-    
+
     if(m_UseBias)
     {
       // Update rate, r = r - \epsilon \nabla_R E
@@ -802,17 +819,17 @@ UpdateControls()
       m_Rate = adder3->GetOutput(); // r = r - \epsilon \nabla_R E  */
       IntegrateRate();
 
-      typedef AddImageFilter<VirtualImageType>   AdderType;
+      using AdderType = AddImageFilter<VirtualImageType>;
       typename AdderType::Pointer biasAdder = AdderType::New();
       biasAdder->SetInput1(m_ForwardImage);    // I_0 o \phi_{10}
       biasAdder->SetInput2(GetBias());         // B(1)
       biasAdder->Update();
-    
+
       m_ForwardImage = biasAdder->GetOutput(); // I_0 o \phi_{10} + B(1)
     }
 
     m_RecalculateEnergy = true;
-   
+
     typename VirtualImageType::IndexType centerIndex;
     m_ForwardImage->TransformPhysicalPointToIndex(transform->TransformPoint(m_CenterPoint), centerIndex);
     bool centerIsInside = m_ForwardImage->GetLargestPossibleRegion().IsInside(centerIndex);
@@ -833,7 +850,7 @@ UpdateControls()
     }
 
   }
-  
+
   m_IsConverged = true;
 }
 
@@ -861,7 +878,7 @@ GenerateData()
   StartOptimization();
   this->m_OutputTransform->UseInverseOn();
 
-  // Integrate rate to get final bias, B(1)  
+  // Integrate rate to get final bias, B(1)
   if(m_UseBias) { IntegrateRate(); }
 
   // Integrate velocity to get final displacement, \phi_10

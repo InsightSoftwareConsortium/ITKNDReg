@@ -1,3 +1,20 @@
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 #ifndef itkTimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter_hxx
 #define itkTimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter_hxx
 
@@ -30,16 +47,16 @@ TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter
       << "dimensionality of 1 greater than the deformation field (output). " );
     }
 
-  typedef VectorLinearInterpolateImageFunction<TimeVaryingVelocityFieldType, ScalarType> DefaultVelocityFieldInterpolatorType;
+  using DefaultVelocityFieldInterpolatorType = VectorLinearInterpolateImageFunction<TimeVaryingVelocityFieldType, ScalarType>;
   this->SetVelocityFieldInterpolator(DefaultVelocityFieldInterpolatorType::New());
 
-  typedef WrapExtrapolateImageFunction<TimeVaryingVelocityFieldType, ScalarType> DefaultVelocityFieldExtrapolatorType;
+  using DefaultVelocityFieldExtrapolatorType = WrapExtrapolateImageFunction<TimeVaryingVelocityFieldType, ScalarType>;
   this->SetVelocityFieldExtrapolator(DefaultVelocityFieldExtrapolatorType::New());
 
-  typedef VectorLinearInterpolateImageFunction<DisplacementFieldType, ScalarType> DefaultDisplacementFieldInterpolatorType;
+  using DefaultDisplacementFieldInterpolatorType = VectorLinearInterpolateImageFunction<DisplacementFieldType, ScalarType>;
   this->SetDisplacementFieldInterpolator(DefaultDisplacementFieldInterpolatorType::New());
 
-  typedef WrapExtrapolateImageFunction<DisplacementFieldType, ScalarType> DefaultDisplacementFieldExtrapolatorType;
+  using DefaultDisplacementFieldExtrapolatorType = WrapExtrapolateImageFunction<DisplacementFieldType, ScalarType>;
   this->SetDisplacementFieldExtrapolator(DefaultDisplacementFieldExtrapolatorType::New());
 }
 
@@ -70,7 +87,7 @@ TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter
   m_TimeOrigin = spaceTimeOrigin[InputImageDimension-1];
 
   // Find end of time dimension
-  typedef typename TimeVaryingVelocityFieldType::RegionType  RegionType;
+  using RegionType = typename TimeVaryingVelocityFieldType::RegionType;
   RegionType region = inputField->GetLargestPossibleRegion();
   typename RegionType::IndexType lastIndex = region.GetIndex();
   typename RegionType::SizeType size = region.GetSize();

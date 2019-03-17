@@ -47,7 +47,7 @@ public:
   using InputPixelType = typename InputImageType::PixelType;
   using OutputPixelType = typename OutputImageType::PixelType;
 
-  /** Standard class typedefs. */
+  /** Standard class type alias. */
   using Self = MyFilter< InputImageType, OutputImageType >;
   using Superclass = ImageToImageFilter< InputImageType, OutputImageType >;
   using Pointer = SmartPointer< Self >;
@@ -65,7 +65,7 @@ protected:
 
   void PrintSelf( std::ostream& os, Indent indent ) const override;
 
-  typedef typename OutputImageType::RegionType OutputRegionType;
+  using OutputRegionType = typename OutputImageType::RegionType;
 
   virtual void DynamicThreadedGenerateData( const OutputRegionType & outputRegion) override;
 

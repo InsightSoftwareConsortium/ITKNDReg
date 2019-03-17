@@ -33,10 +33,10 @@ int itkNormalDistributionImageSourceTest( int argc, char * argv[] )
   const char * outputImageFileName  = argv[1];
 
   const unsigned int                         Dimension = 2;
-  typedef float                              PixelType;
-  typedef itk::Image< PixelType, Dimension > ImageType;
+  using PixelType = float;
+  using ImageType = itk::Image< PixelType, Dimension >;
 
-  typedef itk::NormalDistributionImageSource< ImageType > DistributionSourceType;
+  using DistributionSourceType = itk::NormalDistributionImageSource< ImageType >;
   DistributionSourceType::Pointer distributionSource = DistributionSourceType::New();
 
   EXERCISE_BASIC_OBJECT_METHODS( distributionSource, NormalDistributionImageSource, GenerateImageSource );
@@ -48,7 +48,7 @@ int itkNormalDistributionImageSourceTest( int argc, char * argv[] )
 
   std::cout << distributionSource << std::endl;
 
-  typedef itk::ImageFileWriter< ImageType > WriterType;
+  using WriterType = itk::ImageFileWriter< ImageType >;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputImageFileName );
   writer->SetInput( distributionSource->GetOutput() );
