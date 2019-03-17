@@ -118,7 +118,7 @@ public:
   void SetInterpolator(InterpolatorType* ptr)
   {
     m_Interpolator = dynamic_cast<InterpolatorType*>(ptr);
-    if(ptr != ITK_NULLPTR)
+    if(ptr != nullptr)
     {
       m_Interpolator->SetInputImage(this->GetInputImage());
     }

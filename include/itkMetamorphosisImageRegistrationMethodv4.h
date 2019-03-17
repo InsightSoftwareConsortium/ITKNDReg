@@ -206,7 +206,7 @@ public:
 
   double GetVelocityEnergy();
   double GetRateEnergy();
-  double GetImageEnergy(VirtualImagePointer movingImage, MaskPointer movingMask=ITK_NULLPTR);
+  double GetImageEnergy(VirtualImagePointer movingImage, MaskPointer movingMask=nullptr);
   double GetImageEnergy();
   double GetImageEnergyFraction();
   double GetEnergy();
