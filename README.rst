@@ -1,7 +1,7 @@
 ITKNDReg
 ========
 
-.. image::https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKNDReg?branchName=master
+.. image:: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKNDReg?branchName=master
     :target: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_build?definitionId=15
     :alt: Build status
 
