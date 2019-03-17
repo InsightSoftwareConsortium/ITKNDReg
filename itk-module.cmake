@@ -16,7 +16,18 @@ itk_module(NDReg
     ITKCommon
     ITKStatistics
   COMPILE_DEPENDS
+    ITKCommon
+    ITKDisplacementField
+    ITKFFT
+    ITKImageCompose
+    ITKImageFunction
+    ITKImageGradient
+    ITKImageIntensity
     ITKImageSources
+    ITKImageStatistics
+    ITKMetricsv4
+    ITKRegistrationMethodsv4
+    ITKSpatialObjects
   TEST_DEPENDS
     ITKTestKernel
     ITKMetaIO
