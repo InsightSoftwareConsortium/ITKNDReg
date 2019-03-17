@@ -83,7 +83,7 @@ int itkMyFilterTest( int argc, char * argv[] )
   filter->AddObserver( itk::ProgressEvent(), showProgress );
   filter->SetInput(image);
 
-  typedef itk::ImageFileWriter< ImageType > WriterType;
+  using WriterType = itk::ImageFileWriter< ImageType >;
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName( outputImageFileName );
   writer->SetInput( filter->GetOutput() );

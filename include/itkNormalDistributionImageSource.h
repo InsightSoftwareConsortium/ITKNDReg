@@ -45,14 +45,14 @@ template< typename TImage >
 class NormalDistributionImageSource: public GenerateImageSource< TImage >
 {
 public:
-  typedef TImage                        ImageType;
-  typedef typename ImageType::PixelType PixelType;
+  using ImageType = TImage;
+  using PixelType = typename ImageType::PixelType;
 
-  /** Standard class typedefs. */
-  typedef NormalDistributionImageSource    Self;
-  typedef GenerateImageSource< ImageType > Superclass;
-  typedef SmartPointer< Self >             Pointer;
-  typedef SmartPointer< const Self >       ConstPointer;
+  /** Standard class type alias. */
+  using Self = NormalDistributionImageSource;
+  using Superclass = GenerateImageSource< ImageType >;
+  using Pointer = SmartPointer< Self >;
+  using ConstPointer = SmartPointer< const Self >;
 
   itkStaticConstMacro( ImageDimension, unsigned int, ImageType::ImageDimension );
 
@@ -68,7 +68,7 @@ protected:
 
   void PrintSelf( std::ostream& os, Indent indent ) const ITK_OVERRIDE;
 
-  typedef typename ImageType::RegionType OutputRegionType;
+  using OutputRegionType = typename ImageType::RegionType;
 
   virtual void GenerateData() ITK_OVERRIDE;
 

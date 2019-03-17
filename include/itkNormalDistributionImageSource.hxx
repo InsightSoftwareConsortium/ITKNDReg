@@ -51,7 +51,7 @@ NormalDistributionImageSource< TImage >
   ImageType * output = this->GetOutput();
   const OutputRegionType & outputRegion = output->GetRequestedRegion();
 
-  typedef itk::Statistics::NormalVariateGenerator NormalGeneratorType;
+  using NormalGeneratorType = itk::Statistics::NormalVariateGenerator;
   NormalGeneratorType::Pointer normalGenerator = NormalGeneratorType::New();
   normalGenerator->Initialize( 101 );
 
@@ -62,7 +62,7 @@ NormalDistributionImageSource< TImage >
     }
   const SizeValueType numberOfLinesToProcess = outputRegion.GetNumberOfPixels() / size0;
 
-  typedef ImageScanlineIterator< ImageType > IteratorType;
+  using IteratorType = ImageScanlineIterator< ImageType >;
   IteratorType it( output, outputRegion );
 
   while( !it.IsAtEnd() )

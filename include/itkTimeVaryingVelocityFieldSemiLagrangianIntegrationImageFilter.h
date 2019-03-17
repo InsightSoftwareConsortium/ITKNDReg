@@ -1,3 +1,20 @@
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
 #ifndef itkTimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter_h
 #define itkTimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter_h
 
@@ -24,11 +41,11 @@ class TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter :
   public TimeVaryingVelocityFieldIntegrationImageFilter<TTimeVaryingVelocityField, TDisplacementField>
 {
 public:
-  typedef TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter  Self;
-  typedef TimeVaryingVelocityFieldIntegrationImageFilter
-    <TTimeVaryingVelocityField, TDisplacementField>       Superclass;
-  typedef SmartPointer<Self>                              Pointer;
-  typedef SmartPointer<const Self>                        ConstPointer;
+  using Self = TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter;
+  using Superclass = TimeVaryingVelocityFieldIntegrationImageFilter
+    <TTimeVaryingVelocityField, TDisplacementField>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro( Self );
@@ -47,21 +64,21 @@ public:
   itkStaticConstMacro( OutputImageDimension, unsigned int,
     TDisplacementField::ImageDimension );
 
-  typedef TTimeVaryingVelocityField                   TimeVaryingVelocityFieldType;
-  typedef TDisplacementField                          DisplacementFieldType;
-  typedef typename Superclass::VectorType             VectorType;
-  typedef typename Superclass::RealType               RealType;
-  typedef typename Superclass::ScalarType             ScalarType;
-  typedef typename Superclass::PointType              PointType;
-  typedef typename DisplacementFieldType::RegionType  OutputRegionType;
+  using TimeVaryingVelocityFieldType = TTimeVaryingVelocityField;
+  using DisplacementFieldType = TDisplacementField;
+  using VectorType = typename Superclass::VectorType;
+  using RealType = typename Superclass::RealType;
+  using ScalarType = typename Superclass::ScalarType;
+  using PointType = typename Superclass::PointType;
+  using OutputRegionType = typename DisplacementFieldType::RegionType;
 
-  typedef typename Superclass::VelocityFieldInterpolatorPointer VelocityFieldInterpolatorPointer;
+  using VelocityFieldInterpolatorPointer = typename Superclass::VelocityFieldInterpolatorPointer;
 
-  typedef ExtrapolateImageFunction<TimeVaryingVelocityFieldType, ScalarType> VelocityFieldExtrapolatorType;
-  typedef typename VelocityFieldExtrapolatorType::Pointer VelocityFieldExtrapolatorPointer;
+  using VelocityFieldExtrapolatorType = ExtrapolateImageFunction<TimeVaryingVelocityFieldType, ScalarType>;
+  using VelocityFieldExtrapolatorPointer = typename VelocityFieldExtrapolatorType::Pointer;
 
-  typedef ExtrapolateImageFunction<DisplacementFieldType, ScalarType> DisplacementFieldExtrapolatorType;
-  typedef typename DisplacementFieldExtrapolatorType::Pointer DisplacementFieldExtrapolatorPointer;
+  using DisplacementFieldExtrapolatorType = ExtrapolateImageFunction<DisplacementFieldType, ScalarType>;
+  using DisplacementFieldExtrapolatorPointer = typename DisplacementFieldExtrapolatorType::Pointer;
 
   /**
    * Get/Set the time-varying velocity field extrapolator.  Default = linear. 

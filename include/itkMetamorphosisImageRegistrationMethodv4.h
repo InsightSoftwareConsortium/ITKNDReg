@@ -1,5 +1,22 @@
-#ifndef __itkMetamorphosisImageRegistrationMethodv4_h
-#define __itkMetamorphosisImageRegistrationMethodv4_h
+/*=========================================================================
+ *
+ *  Copyright Insight Software Consortium
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0.txt
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *
+ *=========================================================================*/
+#ifndef itkMetamorphosisImageRegistrationMethodv4_h
+#define itkMetamorphosisImageRegistrationMethodv4_h
 
 #include "itkTimeVaryingVelocityFieldImageRegistrationMethodv4.h"
 #include "itkTimeVaryingVelocityFieldSemiLagrangianTransform.h"
@@ -30,29 +47,29 @@ class ConstantImageFilter:
 public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-  /** Standard class typedefs. */
-  typedef ConstantImageFilter                             Self;
-  typedef ImageToImageFilter< TInputImage, TOutputImage > Superclass;
-  typedef SmartPointer< Self >                            Pointer;
- 
+  /** Standard class type alias. */
+  using Self = ConstantImageFilter;
+  using Superclass = ImageToImageFilter< TInputImage, TOutputImage >;
+  using Pointer = SmartPointer< Self >;
+
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
- 
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConstantImageFilter, ImageToImageFilter);
 
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::PixelType       OutputPixelType;
-  typedef ImageRegionIterator<OutputImageType> OutputImageIteratorType;
+  using OutputImageType = TOutputImage;
+  using OutputPixelType = typename OutputImageType::PixelType;
+  using OutputImageIteratorType = ImageRegionIterator<OutputImageType>;
 
   itkSetMacro(Constant, OutputPixelType);
   itkGetConstMacro(Constant, OutputPixelType);
 
- 
+
 protected:
   ConstantImageFilter(){}
   ~ConstantImageFilter(){}
- 
+
   /** Does the real work. */
   void ThreadedGenerateData(  const typename OutputImageType::RegionType& outputRegionForThread, ThreadIdType threadId)
   {
@@ -67,11 +84,11 @@ protected:
       progress.CompletedPixel();
     }
   }
- 
+
 private:
   ConstantImageFilter(const Self &); //purposely not implemented
   void operator=(const Self &);  //purposely not implemented
- 
+
   OutputPixelType m_Constant;
 };
 
@@ -89,11 +106,11 @@ class MetamorphosisImageRegistrationMethodv4:
 public TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TimeVaryingVelocityFieldSemiLagrangianTransform<double, TFixedImage::ImageDimension> >
 {
 public:
-  /** Standard class typedefs. */
-  typedef MetamorphosisImageRegistrationMethodv4                  Self;
-  typedef TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TimeVaryingVelocityFieldSemiLagrangianTransform<double, TFixedImage::ImageDimension> > Superclass;
-  typedef SmartPointer<Self>                                      Pointer;
-  typedef SmartPointer<const Self>                                ConstPointer;
+  /** Standard class type alias. */
+  using Self = MetamorphosisImageRegistrationMethodv4;
+  using Superclass = TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TimeVaryingVelocityFieldSemiLagrangianTransform<double, TFixedImage::ImageDimension> >;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -106,58 +123,58 @@ public:
   itkConceptMacro(MovingSameDimensionCheck, (Concept::SameDimension<TFixedImage::ImageDimension,TMovingImage::ImageDimension>));
 #endif
 
-  /** Image typedefs */
+  /** Image type alias */
   itkStaticConstMacro(ImageDimension, unsigned int, TFixedImage::ImageDimension);
 
-  typedef TFixedImage                               FixedImageType;
-  typedef typename FixedImageType::Pointer          FixedImagePointer;
+  using FixedImageType = TFixedImage;
+  using FixedImagePointer = typename FixedImageType::Pointer;
 
-  typedef TMovingImage                              MovingImageType;
-  typedef typename MovingImageType::Pointer         MovingImagePointer;
+  using MovingImageType = TMovingImage;
+  using MovingImagePointer = typename MovingImageType::Pointer;
 
-  typedef typename Superclass::VirtualImageType     VirtualImageType;
-  typedef typename VirtualImageType::Pointer        VirtualImagePointer;
-  typedef typename VirtualImageType::PixelType      VirtualPixelType;
+  using VirtualImageType = typename Superclass::VirtualImageType;
+  using VirtualImagePointer = typename VirtualImageType::Pointer;
+  using VirtualPixelType = typename VirtualImageType::PixelType;
 
-  typedef Image<unsigned char, ImageDimension>      MaskImageType;
-  typedef typename MaskImageType::Pointer           MaskImagePointer;
-  typedef ImageMaskSpatialObject<ImageDimension>        MaskType;  
-  typedef typename MaskType::Pointer                MaskPointer;
-  typedef typename MaskType::ConstPointer           MaskConstPointer;
+  using MaskImageType = Image<unsigned char, ImageDimension>;
+  using MaskImagePointer = typename MaskImageType::Pointer;
+  using MaskType = ImageMaskSpatialObject<ImageDimension>;
+  using MaskPointer = typename MaskType::Pointer;
+  using MaskConstPointer = typename MaskType::ConstPointer;
 
-  typedef VirtualImageType                          BiasImageType;
-  typedef typename BiasImageType::Pointer           BiasImagePointer;
+  using BiasImageType = VirtualImageType;
+  using BiasImagePointer = typename BiasImageType::Pointer;
 
-  typedef typename Superclass::OutputTransformType  OutputTransformType;
-  typedef typename OutputTransformType::ScalarType  RealType;
+  using OutputTransformType = typename Superclass::OutputTransformType;
+  using RealType = typename OutputTransformType::ScalarType;
 
-  typedef typename OutputTransformType::DisplacementFieldType          FieldType;
-  typedef typename FieldType::Pointer                                  FieldPointer;
-  typedef typename FieldType::PixelType                                VectorType;
+  using FieldType = typename OutputTransformType::DisplacementFieldType;
+  using FieldPointer = typename FieldType::Pointer;
+  using VectorType = typename FieldType::PixelType;
 
-  typedef Image<typename VirtualImageType::PixelType,ImageDimension+1> TimeVaryingImageType;
-  typedef typename TimeVaryingImageType::Pointer                       TimeVaryingImagePointer;
+  using TimeVaryingImageType = Image<typename VirtualImageType::PixelType,ImageDimension+1>;
+  using TimeVaryingImagePointer = typename TimeVaryingImageType::Pointer;
 
-  typedef typename OutputTransformType::TimeVaryingVelocityFieldType   TimeVaryingFieldType;
-  typedef typename TimeVaryingFieldType::Pointer                       TimeVaryingFieldPointer;
+  using TimeVaryingFieldType = typename OutputTransformType::TimeVaryingVelocityFieldType;
+  using TimeVaryingFieldPointer = typename TimeVaryingFieldType::Pointer;
 
-  // Metric typedefs
-  typedef typename Superclass::ImageMetricType     ImageMetricType;
-  typedef typename ImageMetricType::Pointer        ImageMetricPointer;
-  typedef typename ImageMetricType::MeasureType    MetricValueType;
-  typedef typename ImageMetricType::DerivativeType MetricDerivativeType;
-  typedef typename ImageMetricType::MetricTraits   MetricTraits;
+  // Metric type alias
+  using ImageMetricType = typename Superclass::ImageMetricType;
+  using ImageMetricPointer = typename ImageMetricType::Pointer;
+  using MetricValueType = typename ImageMetricType::MeasureType;
+  using MetricDerivativeType = typename ImageMetricType::DerivativeType;
+  using MetricTraits = typename ImageMetricType::MetricTraits;
 
-  // Filter typedefs
-  typedef typename MetricTraits::FixedImageGradientFilterType  FixedImageGradientFilterType;
-  typedef typename FixedImageGradientFilterType::Pointer       FixedImageGradientFilterPointer;
-  typedef GradientImageFilter<FixedImageType, double, double>  DefaultFixedImageGradientFilterType;
-  typedef ConstantImageFilter<VirtualImageType, typename ImageMetricType::FixedImageGradientImageType> FixedImageConstantGradientFilterType;
+  // Filter type alias
+  using FixedImageGradientFilterType = typename MetricTraits::FixedImageGradientFilterType;
+  using FixedImageGradientFilterPointer = typename FixedImageGradientFilterType::Pointer;
+  using DefaultFixedImageGradientFilterType = GradientImageFilter<FixedImageType, double, double>;
+  using FixedImageConstantGradientFilterType = ConstantImageFilter<VirtualImageType, typename ImageMetricType::FixedImageGradientImageType>;
 
-  typedef typename MetricTraits::MovingImageGradientFilterType MovingImageGradientFilterType;
-  typedef typename MovingImageGradientFilterType::Pointer      MovingImageGradientFilterPointer;
-  typedef GradientImageFilter<MovingImageType, double, double> DefaultMovingImageGradientFilterType;
-  typedef ConstantImageFilter<VirtualImageType, typename ImageMetricType::MovingImageGradientImageType> MovingImageConstantGradientFilterType;
+  using MovingImageGradientFilterType = typename MetricTraits::MovingImageGradientFilterType;
+  using MovingImageGradientFilterPointer = typename MovingImageGradientFilterType::Pointer;
+  using DefaultMovingImageGradientFilterType = GradientImageFilter<MovingImageType, double, double>;
+  using MovingImageConstantGradientFilterType = ConstantImageFilter<VirtualImageType, typename ImageMetricType::MovingImageGradientImageType>;
 
   /** Public member functions */
   itkSetMacro(Scale, double);
@@ -207,7 +224,7 @@ protected:
   void Initialize();
   void IntegrateRate();
   FieldPointer GetMetricDerivative(FieldPointer field, bool useImageGradients);
-  void UpdateControls(); 
+  void UpdateControls();
   void StartOptimization();
   void GenerateData();
   void PrintSelf(std::ostream& os, Indent indent) const;
