@@ -103,9 +103,9 @@ protected:
   TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter();
   ~TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter();
 
-  void PrintSelf( std::ostream & os, Indent indent ) const ITK_OVERRIDE;
-  virtual void BeforeThreadedGenerateData() ITK_OVERRIDE;
-  virtual void ThreadedGenerateData( const OutputRegionType &, ThreadIdType ) ITK_OVERRIDE;
+  void PrintSelf( std::ostream & os, Indent indent ) const override;
+  void BeforeThreadedGenerateData() override;
+  void ThreadedGenerateData( const OutputRegionType &, ThreadIdType ) override;
   VectorType IntegrateVelocityAtPoint( const PointType &initialSpatialPoint, const TimeVaryingVelocityFieldType * inputField );
 
   DisplacementFieldExtrapolatorPointer      m_DisplacementFieldExtrapolator;

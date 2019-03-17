@@ -83,7 +83,7 @@ public:
    * Returns the extrapolated image intensity at a
    * specified position
    */
-  virtual OutputType EvaluateAtContinuousIndex(
+  OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType & index) const ITK_OVERRIDE
   {
 
@@ -129,8 +129,8 @@ public:
    * Returns the extrapolated image intensity at a
    * specified position.
    */
-  virtual OutputType EvaluateAtIndex(
-    const IndexType & index) const ITK_OVERRIDE
+  OutputType EvaluateAtIndex(
+    const IndexType & index) const override
   {
     IndexType nindex;
 
@@ -156,7 +156,7 @@ protected:
   WrapExtrapolateImageFunction()
   { m_Interpolator = dynamic_cast<InterpolatorType*>(LinearInterpolatorType::New().GetPointer()); }
   ~WrapExtrapolateImageFunction(){}
-  void PrintSelf(std::ostream & os, Indent indent) const ITK_OVERRIDE
+  void PrintSelf(std::ostream & os, Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
     os << indent << "Interpolator: " << this->m_Interpolator << std::endl;
