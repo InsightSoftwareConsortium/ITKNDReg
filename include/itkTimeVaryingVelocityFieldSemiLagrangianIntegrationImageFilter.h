@@ -41,6 +41,8 @@ class TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter :
   public TimeVaryingVelocityFieldIntegrationImageFilter<TTimeVaryingVelocityField, TDisplacementField>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter);
+
   using Self = TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter;
   using Superclass = TimeVaryingVelocityFieldIntegrationImageFilter
     <TTimeVaryingVelocityField, TDisplacementField>;
@@ -111,8 +113,6 @@ protected:
   DisplacementFieldExtrapolatorPointer      m_DisplacementFieldExtrapolator;
  
 private:
-  TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter( const Self & ) ITK_DELETE_FUNCTION;
-  void operator=( const Self & ) ITK_DELETE_FUNCTION;
 
   VelocityFieldInterpolatorPointer          m_VelocityFieldInterpolator;
   VelocityFieldExtrapolatorPointer          m_VelocityFieldExtrapolator;

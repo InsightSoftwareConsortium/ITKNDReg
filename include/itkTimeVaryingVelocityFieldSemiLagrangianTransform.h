@@ -36,6 +36,8 @@ class TimeVaryingVelocityFieldSemiLagrangianTransform :
   public TimeVaryingVelocityFieldTransform<TParametersValueType, NDimensions>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(TimeVaryingVelocityFieldSemiLagrangianTransform);
+
   /** Standard class type alias. */
   using Self = TimeVaryingVelocityFieldSemiLagrangianTransform;
   using Superclass = TimeVaryingVelocityFieldTransform<TParametersValueType, NDimensions>;
@@ -87,8 +89,7 @@ protected:
   ~TimeVaryingVelocityFieldSemiLagrangianTransform() override = default;
 
 private:
-  TimeVaryingVelocityFieldSemiLagrangianTransform( const Self& ) ITK_DELETE_FUNCTION;
-  void operator=( const Self& ) ITK_DELETE_FUNCTION;
+
   bool m_UseInverse;
 };
 
