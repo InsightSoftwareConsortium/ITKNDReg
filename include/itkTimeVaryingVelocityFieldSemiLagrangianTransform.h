@@ -77,7 +77,7 @@ public:
 
   /** Trigger the computation of the displacement field by integrating
    * the time-varying velocity field. */
-  virtual void IntegrateVelocityField() ITK_OVERRIDE;
+  void IntegrateVelocityField() override;
   itkBooleanMacro(UseInverse);
   itkSetMacro(UseInverse, bool);
   itkGetConstMacro(UseInverse, bool);

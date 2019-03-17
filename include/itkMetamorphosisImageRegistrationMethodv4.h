@@ -226,8 +226,8 @@ protected:
   FieldPointer GetMetricDerivative(FieldPointer field, bool useImageGradients);
   void UpdateControls();
   void StartOptimization();
-  void GenerateData();
-  void PrintSelf(std::ostream& os, Indent indent) const;
+  void GenerateData() override;
+  void PrintSelf(std::ostream& os, Indent indent) const override;
 
 private:
   MetamorphosisImageRegistrationMethodv4(const Self&);  // Intentionally not implemened
