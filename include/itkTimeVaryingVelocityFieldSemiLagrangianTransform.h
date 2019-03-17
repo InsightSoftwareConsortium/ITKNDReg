@@ -29,7 +29,7 @@ namespace itk
  *
  *
  * \ingroup Transforms
- * \ingroup ITKDisplacementField
+ * \ingroup NDReg
  */
 template<typename TParametersValueType, unsigned int NDimensions>
 class TimeVaryingVelocityFieldSemiLagrangianTransform :

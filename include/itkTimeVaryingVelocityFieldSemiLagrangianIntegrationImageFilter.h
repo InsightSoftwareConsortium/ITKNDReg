@@ -32,7 +32,7 @@ namespace itk
  * \warning The output deformation field needs to have dimensionality of 1
  * less than the input time-varying velocity field.
  *
- * \ingroup ITKDisplacementField
+ * \ingroup NDReg
  */
 template<typename TTimeVaryingVelocityField, typename TDisplacementField =
  Image<typename TTimeVaryingVelocityField::PixelType,

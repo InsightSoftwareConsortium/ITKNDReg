@@ -97,7 +97,7 @@ private:
 *
 * \author Kwane Kutten
 *
-* \ingroup ITKRegistrationMethodsv4
+* \ingroup NDReg
 */
 
 template<  typename TFixedImage,

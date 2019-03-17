@@ -33,7 +33,7 @@ namespace itk
  * (e.g. float or double).
  *
  * \ingroup ImageFunctions
- * \ingroup ITKImageFunction
+ * \ingroup NDReg
  */
 template< typename TInputImage, typename TCoordRep = float >
 class WrapExtrapolateImageFunction:
@@ -86,7 +86,7 @@ public:
   virtual OutputType EvaluateAtContinuousIndex(
     const ContinuousIndexType & index) const ITK_OVERRIDE
   {
-    
+
     ContinuousIndexType nindex;
 
     for ( unsigned int j = 0; j < ImageDimension; j++ )
@@ -104,7 +104,7 @@ public:
       }
     }
 
-    
+
     return static_cast< OutputType >( m_Interpolator->EvaluateAtContinuousIndex(nindex) );
   }
 
@@ -139,7 +139,7 @@ public:
       nindex[j] = index[j];
 
       typename IndexType::IndexValueType size = this->GetEndIndex()[j] - this->GetStartIndex()[j] + 1;
-      
+
       while(nindex[j] > this->GetEndIndex()[j])
       {
         nindex[j] -= size;
@@ -162,10 +162,10 @@ protected:
     os << indent << "Interpolator: " << this->m_Interpolator << std::endl;
   }
 
-private: 
+private:
   WrapExtrapolateImageFunction(const Self &) ITK_DELETE_FUNCTION;
   void operator=(const Self &) ITK_DELETE_FUNCTION;
-  
+
   InterpolatorPointerType m_Interpolator;
 };
 } // end namespace itk
