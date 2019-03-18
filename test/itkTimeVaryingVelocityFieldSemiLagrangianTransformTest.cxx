@@ -34,13 +34,12 @@ int itkTimeVaryingVelocityFieldSemiLagrangianTransformTest( int argc, char * arg
 
   constexpr unsigned int Dimension = 2;
 
-  using PixelType = float;
-  using ImageType = itk::Image< PixelType, Dimension >;
+  using ParametersValueType = double;
 
   using TimeVaryingVelocityFieldSemiLagrangianTransformType =
-    itk::TimeVaryingVelocityFieldSemiLagrangianTransform< PixelType >;
-  TimeVaryingVelocityFieldSemiLagrangianTransform::Pointer timeVaryingVelocityFieldSemiLagrangianTransform =
-    TimeVaryingVelocityFieldSemiLagrangianTransform::New();
+    itk::TimeVaryingVelocityFieldSemiLagrangianTransform< ParametersValueType, Dimension >;
+  TimeVaryingVelocityFieldSemiLagrangianTransformType::Pointer timeVaryingVelocityFieldSemiLagrangianTransform =
+    TimeVaryingVelocityFieldSemiLagrangianTransformType::New();
 
   EXERCISE_BASIC_OBJECT_METHODS( timeVaryingVelocityFieldSemiLagrangianTransform,
     TimeVaryingVelocityFieldSemiLagrangianTransform, TimeVaryingVelocityFieldTransform );
