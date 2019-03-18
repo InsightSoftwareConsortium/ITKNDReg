@@ -141,7 +141,7 @@ InitializeKernels(TimeVaryingImagePointer kernel, TimeVaryingImagePointer invers
   for(KIt.GoToBegin(), LIt.GoToBegin(); !KIt.IsAtEnd(); ++KIt,++LIt)
   {
     typename TimeVaryingImageType::IndexType  k = KIt.GetIndex();  // Get the frequency index
-    double  A, B;
+    double  A;
 
     // For every dimension accumulate the sum in A
     unsigned int i;
@@ -679,7 +679,7 @@ UpdateControls()
     // Compute reverse mapping, \phi_{t1} by integrating velocity field, v(t).
     if(j == m_NumberOfTimeSteps-1)
     {
-      this->m_OutputTransform->GetModifiableDisplacementField()->FillBuffer(NumericTraits<VectorType>::Zero);
+      this->m_OutputTransform->GetModifiableDisplacementField()->FillBuffer(NumericTraits<VectorType>::ZeroValue());
     }
     else
     {
