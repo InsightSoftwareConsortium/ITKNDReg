@@ -56,11 +56,11 @@ MetamorphosisImageRegistrationMethodv4()
 
   using FixedGradientPixelType = typename ImageMetricType::FixedImageGradientImageType::PixelType;
   m_FixedImageConstantGradientFilter = FixedImageConstantGradientFilterType::New();
-  m_FixedImageConstantGradientFilter->SetConstant(NumericTraits<FixedGradientPixelType>::One);
+  m_FixedImageConstantGradientFilter->SetConstant(NumericTraits<FixedGradientPixelType>::OneValue());
 
   using MovingGradientPixelType = typename ImageMetricType::MovingImageGradientImageType::PixelType;
   m_MovingImageConstantGradientFilter = MovingImageConstantGradientFilterType::New();
-  m_MovingImageConstantGradientFilter->SetConstant(NumericTraits<MovingGradientPixelType>::One);
+  m_MovingImageConstantGradientFilter->SetConstant(NumericTraits<MovingGradientPixelType>::OneValue());
 
   this->SetMetric(MeanSquaresImageToImageMetricv4<FixedImageType, MovingImageType>::New());
 }
@@ -214,7 +214,7 @@ Initialize()
   velocitySize = velocity->GetLargestPossibleRegion().GetSize();
   velocityRegion.SetSize(velocitySize);
   velocity->SetRegions(velocityRegion);
-  velocity->FillBuffer(NumericTraits<VectorType>::Zero);
+  velocity->FillBuffer(NumericTraits<VectorType>::ZeroValue());
 
   // Initialize displacement, /phi_{10}
   this->m_OutputTransform->SetVelocityField(velocity);
@@ -260,13 +260,13 @@ Initialize()
   m_Rate->SetRegions(velocityRegion);
   m_Rate->CopyInformation(velocity);
   m_Rate->Allocate();
-  m_Rate->FillBuffer(NumericTraits<VirtualPixelType>::Zero);
+  m_Rate->FillBuffer(NumericTraits<VirtualPixelType>::ZeroValue());
 
   // Initialize bias, B = 0
   m_Bias->CopyInformation(m_VirtualImage);
   m_Bias->SetRegions(virtualRegion);
   m_Bias->Allocate();
-  m_Bias->FillBuffer(NumericTraits<VirtualPixelType>::Zero);
+  m_Bias->FillBuffer(NumericTraits<VirtualPixelType>::ZeroValue());
 
   // Initialize forward image I(1)
   using MovingCasterType = CastImageFilter<MovingImageType, VirtualImageType>;
