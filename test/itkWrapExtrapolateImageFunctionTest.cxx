@@ -45,7 +45,6 @@ int itkWrapExtrapolateImageFunctionTest( int argc, char * argv[] )
     ExtrapolateImageFunction );
 
 
-
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

@@ -47,7 +47,6 @@ int itkMetamorphosisImageRegistrationMethodv4Test( int argc, char * argv[] )
     TimeVaryingVelocityFieldImageRegistrationMethodv4 );
 
 
-
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

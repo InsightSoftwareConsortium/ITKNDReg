@@ -45,7 +45,6 @@ int itkTimeVaryingVelocityFieldSemiLagrangianTransformTest( int argc, char * arg
     TimeVaryingVelocityFieldSemiLagrangianTransform, TimeVaryingVelocityFieldTransform );
 
 
-
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }

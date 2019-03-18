@@ -52,7 +52,6 @@ int itkTimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilterTest( int arg
     TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter, TimeVaryingVelocityFieldIntegrationImageFilter );
 
 
-
   std::cout << "Test finished." << std::endl;
   return EXIT_SUCCESS;
 }
