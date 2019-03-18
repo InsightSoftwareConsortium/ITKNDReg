@@ -38,12 +38,10 @@ int itkTimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilterTest( int arg
   using ImageType = itk::Image< PixelType, Dimension >;
 
   using VectorType = itk::Vector< PixelType, Dimension >;
-  using DisplacementFieldType = itk::Image< VectorType, Dimension >;
   using TimeVaryingVelocityFieldType = itk::Image< VectorType, Dimension >;
 
   using TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilterType =
-    itk::TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter< TimeVaryingVelocityFieldType,
-    DisplacementFieldType >;
+    itk::TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter< TimeVaryingVelocityFieldType >;
   TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilterType::Pointer
     timeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter =
     TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilterType::New();
