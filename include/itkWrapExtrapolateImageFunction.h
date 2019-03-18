@@ -109,7 +109,7 @@ public:
   }
 
 
-  void SetInputImage(const InputImageType*ptr)
+  void SetInputImage(const InputImageType*ptr) override
   {
     Superclass::SetInputImage(ptr);
     m_Interpolator->SetInputImage(this->GetInputImage());
