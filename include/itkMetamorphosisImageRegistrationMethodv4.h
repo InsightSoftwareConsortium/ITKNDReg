@@ -223,7 +223,7 @@ protected:
   void IntegrateRate();
   FieldPointer GetMetricDerivative(FieldPointer field, bool useImageGradients);
   void UpdateControls();
-  void StartOptimization();
+  void StartOptimization() override;
   void GenerateData() override;
   void PrintSelf(std::ostream& os, Indent indent) const override;
 
