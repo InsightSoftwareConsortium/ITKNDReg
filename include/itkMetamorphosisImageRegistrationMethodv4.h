@@ -71,9 +71,8 @@ protected:
   ~ConstantImageFilter(){}
 
   /** Does the real work. */
-  void ThreadedGenerateData(  const typename OutputImageType::RegionType& outputRegionForThread, ThreadIdType threadId)
+  void DynamicThreadedGenerateData(const typename OutputImageType::RegionType& outputRegionForThread) override
   {
-    ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
     OutputPixelType constant = this->GetConstant();
     OutputImageIteratorType  it(this->GetOutput(),outputRegionForThread);
 
@@ -81,7 +80,6 @@ protected:
     {
       it.Set(constant);
       ++it;
-      progress.CompletedPixel();
     }
   }
 
@@ -225,7 +223,7 @@ protected:
   void IntegrateRate();
   FieldPointer GetMetricDerivative(FieldPointer field, bool useImageGradients);
   void UpdateControls();
-  void StartOptimization();
+  void StartOptimization() override;
   void GenerateData() override;
   void PrintSelf(std::ostream& os, Indent indent) const override;
 
