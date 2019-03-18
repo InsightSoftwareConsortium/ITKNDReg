@@ -18,7 +18,6 @@
 #ifndef itkMetamorphosisImageRegistrationMethodv4_hxx
 #define itkMetamorphosisImageRegistrationMethodv4_hxx
 #include "itkMetamorphosisImageRegistrationMethodv4.h"
-#include "vcl_legacy_aliases.h"
 
 namespace itk
 {
@@ -147,13 +146,13 @@ InitializeKernels(TimeVaryingImagePointer kernel, TimeVaryingImagePointer invers
     unsigned int i;
     for(i = 0, A = gamma; i < ImageDimension; i++)
     {
-      A += 2 * alpha * vcl_pow(size[i],2) * ( 1.0-cos(2*vnl_math::pi*k[i]/size[i]) );
-      //A += 2 * alpha * vcl_pow(size[i]/m_Scale,2) * ( 1.0-cos(2*vnl_math::pi*k[i]/size[i]) );
-      //A += 2 * alpha * vcl_pow(spacing[i],-2) * ( 1.0 - cos(2*vnl_math::pi*k[i]*spacing[i]) );
-      //A += alpha * vcl_pow(2*vnl_math::pi*k[i]*spacing[i],2);
+      A += 2 * alpha * std::pow(size[i],2) * ( 1.0-std::cos(2*vnl_math::pi*k[i]/size[i]) );
+      //A += 2 * alpha * std::pow(size[i]/m_Scale,2) * ( 1.0-std::cos(2*vnl_math::pi*k[i]/size[i]) );
+      //A += 2 * alpha * std::pow(spacing[i],-2) * ( 1.0 - std::cos(2*vnl_math::pi*k[i]*spacing[i]) );
+      //A += alpha * std::pow(2*vnl_math::pi*k[i]*spacing[i],2);
     }
 
-    KIt.Set(vcl_pow(A,-2)); // Kernel
+    KIt.Set(std::pow(A,-2)); // Kernel
     LIt.Set(A);             // "Inverse" kernel
   }
 }
@@ -177,7 +176,7 @@ Initialize()
   for(unsigned int i = 0; i < ImageDimension; i++)
   {
     velocityIndex[i] = fixedRegion.GetIndex()[i];
-    velocitySize[i] =  vcl_floor(fixedRegion.GetSize()[i]*m_Scale + 1.0001);
+    velocitySize[i] =  Math::floor(fixedRegion.GetSize()[i]*m_Scale + 1.0001);
     velocityOrigin[i] = fixedImage->GetOrigin()[i];
     velocitySpacing[i] = fixedImage->GetSpacing()[i] / m_Scale;
     for(unsigned int j = 0; j < ImageDimension; j++)
@@ -205,7 +204,7 @@ Initialize()
 
   using PadderType = FFTPadImageFilter<TimeVaryingFieldType>;
   typename PadderType::Pointer padder = PadderType::New();
-  padder->SetSizeGreatestPrimeFactor(vnl_math_min((unsigned int)5, greatestPrimeFactor));
+  padder->SetSizeGreatestPrimeFactor(std::min((unsigned int)5, greatestPrimeFactor));
   padder->SetInput(velocity);
   padder->Update();
   velocity = padder->GetOutput();
@@ -357,8 +356,8 @@ CalculateNorm(TimeVaryingImagePointer image)
   calculator->Update();
 
   // sumOfSquares = (var(x) + mean(x)^2)*length(x)
-  double sumOfSquares = (calculator->GetVariance()+vcl_pow(calculator->GetMean(),2))*image->GetLargestPossibleRegion().GetNumberOfPixels();
-  return vcl_sqrt(sumOfSquares*m_VoxelVolume*m_TimeStep);
+  double sumOfSquares = (calculator->GetVariance()+std::pow(calculator->GetMean(),2))*image->GetLargestPossibleRegion().GetNumberOfPixels();
+  return std::sqrt(sumOfSquares*m_VoxelVolume*m_TimeStep);
 }
 
 template<typename TFixedImage, typename TMovingImage>
@@ -415,7 +414,7 @@ double
 MetamorphosisImageRegistrationMethodv4<TFixedImage, TMovingImage>::
 GetVelocityEnergy()
 {
-  return 0.5 * vcl_pow(CalculateNorm(ApplyKernel(m_InverseVelocityKernel,this->m_OutputTransform->GetVelocityField())),2); // 0.5 ||L_V V||^2
+  return 0.5 * std::pow(CalculateNorm(ApplyKernel(m_InverseVelocityKernel,this->m_OutputTransform->GetVelocityField())),2); // 0.5 ||L_V V||^2
 }
 
 template<typename TFixedImage, typename TMovingImage>
@@ -425,7 +424,7 @@ GetRateEnergy()
 {
   if(m_UseBias)
   {
-    return 0.5 * vcl_pow(m_Mu * CalculateNorm(ApplyKernel(m_InverseRateKernel,m_Rate)),2); // 0.5 \mu^2 ||L_R r||^2
+    return 0.5 * std::pow(m_Mu * CalculateNorm(ApplyKernel(m_InverseRateKernel,m_Rate)),2); // 0.5 \mu^2 ||L_R r||^2
   }
   else
   {
@@ -452,7 +451,7 @@ GetImageEnergy(VirtualImagePointer movingImage, MaskPointer movingMask)
   metric->SetVirtualDomainFromImage(m_VirtualImage);
   metric->Initialize();
 
-  return 0.5*vcl_pow(m_Sigma,-2) * metric->GetValue() * metric->GetNumberOfValidPoints() * m_VoxelVolume;         // 0.5 \sigma^{-2} ||I(1) - I_1||
+  return 0.5*std::pow(m_Sigma,-2) * metric->GetValue() * metric->GetNumberOfValidPoints() * m_VoxelVolume;         // 0.5 \sigma^{-2} ||I(1) - I_1||
 }
 
 template<typename TFixedImage, typename TMovingImage>
@@ -653,7 +652,7 @@ GetMetricDerivative(FieldPointer field, bool useImageGradients)
 
   typename FieldMultiplierType::Pointer multiplier1 = FieldMultiplierType::New();
   multiplier1->SetInput(metricDerivativeField);  // -dM(I(1) o \phi{t1}, I_1 o \phi{t1})
-  multiplier1->SetConstant(vcl_pow(m_Sigma,-2)); // 0.5 \sigma^{-2}
+  multiplier1->SetConstant(std::pow(m_Sigma,-2)); // 0.5 \sigma^{-2}
   multiplier1->Update();
 
   return multiplier1->GetOutput(); // p(t) \nabla I(t) = p(1, \phi{t1})  \nabla I(1, \phi{t1}) = -0.5 \sigma^{-2} -dM(I(1) o \phi{t1}, I_1 o \phi{t1})
@@ -727,7 +726,7 @@ UpdateControls()
 
     typename TimeVaryingImageMultiplierType::Pointer multiplier1 = TimeVaryingImageMultiplierType::New();
     multiplier1->SetInput(ApplyKernel(m_RateKernel,rateJoiner->GetOutput())); // K_R[p]
-    multiplier1->SetConstant(-vcl_pow(m_Mu,-2));     // -\mu^-2
+    multiplier1->SetConstant(-std::pow(m_Mu,-2));     // -\mu^-2
 
     typename TimeVaryingImageAdderType::Pointer adder1 = TimeVaryingImageAdderType::New();
     adder1->SetInput1(m_Rate);                     // r
