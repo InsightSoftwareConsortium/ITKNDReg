@@ -40,6 +40,8 @@ class WrapExtrapolateImageFunction:
   public ExtrapolateImageFunction< TInputImage, TCoordRep >
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(WrapExtrapolateImageFunction);
+
   /** Standard class type alias. */
   using Self = WrapExtrapolateImageFunction;
   using Superclass = ExtrapolateImageFunction< TInputImage, TCoordRep >;
@@ -163,8 +165,6 @@ protected:
   }
 
 private:
-  WrapExtrapolateImageFunction(const Self &) ITK_DELETE_FUNCTION;
-  void operator=(const Self &) ITK_DELETE_FUNCTION;
 
   InterpolatorPointerType m_Interpolator;
 };

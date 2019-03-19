@@ -47,6 +47,8 @@ class ConstantImageFilter:
 public ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(ConstantImageFilter);
+
   /** Standard class type alias. */
   using Self = ConstantImageFilter;
   using Superclass = ImageToImageFilter< TInputImage, TOutputImage >;
@@ -84,8 +86,6 @@ protected:
   }
 
 private:
-  ConstantImageFilter(const Self &); //purposely not implemented
-  void operator=(const Self &);  //purposely not implemented
 
   OutputPixelType m_Constant;
 };
@@ -104,6 +104,8 @@ class MetamorphosisImageRegistrationMethodv4:
 public TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TimeVaryingVelocityFieldSemiLagrangianTransform<double, TFixedImage::ImageDimension> >
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(MetamorphosisImageRegistrationMethodv4);
+
   /** Standard class type alias. */
   using Self = MetamorphosisImageRegistrationMethodv4;
   using Superclass = TimeVaryingVelocityFieldImageRegistrationMethodv4<TFixedImage, TMovingImage, TimeVaryingVelocityFieldSemiLagrangianTransform<double, TFixedImage::ImageDimension> >;
@@ -228,8 +230,6 @@ protected:
   void PrintSelf(std::ostream& os, Indent indent) const override;
 
 private:
-  MetamorphosisImageRegistrationMethodv4(const Self&);  // Intentionally not implemened
-  void operator=(const Self&);    //Intentionally not implemented
 
   double m_Scale;
   double m_RegistrationSmoothness;
