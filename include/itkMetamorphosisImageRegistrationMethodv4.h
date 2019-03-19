@@ -69,8 +69,8 @@ public:
 
 
 protected:
-  ConstantImageFilter(){}
-  ~ConstantImageFilter(){}
+  ConstantImageFilter() = default;
+  ~ConstantImageFilter() override = default;
 
   /** Does the real work. */
   void DynamicThreadedGenerateData(const typename OutputImageType::RegionType& outputRegionForThread) override
