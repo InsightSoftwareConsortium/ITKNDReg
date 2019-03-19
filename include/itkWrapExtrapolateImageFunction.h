@@ -84,7 +84,7 @@ public:
    * specified position
    */
   OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType & index) const ITK_OVERRIDE
+    const ContinuousIndexType & index) const override
   {
 
     ContinuousIndexType nindex;
