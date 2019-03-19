@@ -61,13 +61,6 @@ TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter
 }
 
 template<typename TTimeVaryingVelocityField, typename TDisplacementField>
-TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter
-  <TTimeVaryingVelocityField, TDisplacementField>
-::~TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter()
-{
-}
-
-template<typename TTimeVaryingVelocityField, typename TDisplacementField>
 void
 TimeVaryingVelocityFieldSemiLagrangianIntegrationImageFilter
   <TTimeVaryingVelocityField, TDisplacementField>

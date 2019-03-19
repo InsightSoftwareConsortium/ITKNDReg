@@ -84,7 +84,7 @@ public:
 
 protected:
   TimeVaryingVelocityFieldSemiLagrangianTransform();
-  virtual ~TimeVaryingVelocityFieldSemiLagrangianTransform(){};
+  ~TimeVaryingVelocityFieldSemiLagrangianTransform() override = default;
 
 private:
   TimeVaryingVelocityFieldSemiLagrangianTransform( const Self& ) ITK_DELETE_FUNCTION;
