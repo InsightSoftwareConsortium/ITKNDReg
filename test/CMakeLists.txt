@@ -29,3 +29,6 @@ itk_add_test(NAME itkWrapExtrapolateImageFunctionTest
       COMMAND NDRegTestDriver
     itkWrapExtrapolateImageFunctionTest ${ITK_TEST_OUTPUT_DIR}/itkMyFilterTestOutput.mha
   )
+
+itk_python_expression_add_test(NAME itkMetamorphosisImageRegistrationMethodv4PythonTest
+  EXPRESSION "method = itk.MetamorphosisImageRegistrationMethodv4.New()")
