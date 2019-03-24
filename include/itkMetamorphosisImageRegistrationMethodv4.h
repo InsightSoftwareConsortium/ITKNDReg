@@ -215,7 +215,7 @@ public:
 
 protected:
   MetamorphosisImageRegistrationMethodv4();
-  ~MetamorphosisImageRegistrationMethodv4(){};
+  ~MetamorphosisImageRegistrationMethodv4() override = default;
   TimeVaryingImagePointer ApplyKernel(TimeVaryingImagePointer kernel, TimeVaryingImagePointer image);
   TimeVaryingFieldPointer ApplyKernel(TimeVaryingImagePointer kernel, TimeVaryingFieldPointer image);
   double CalculateNorm(TimeVaryingImagePointer image);
