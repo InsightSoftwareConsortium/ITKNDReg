@@ -296,7 +296,7 @@ Initialize()
     duplicator->SetInputImage(m_MovingMaskImage);
     duplicator->Update();
 
-    m_ForwardMaskImage = duplicator->GetModifiableOutput(); // M(1) = M_0
+    m_ForwardMaskImage = duplicator->GetOutput(); // M(1) = M_0
   }
 
   // Initialize fixed mask M_1
