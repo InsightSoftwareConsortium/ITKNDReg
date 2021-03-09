@@ -13,7 +13,7 @@ except ImportError:
 
 setup(
     name='itk-ndreg',
-    version='0.1.1',
+    version='0.2.0',
     author='Neurodata',
     author_email='vikramc@jhmi.edu',
     packages=['itk'],
@@ -44,6 +44,6 @@ setup(
     keywords='ITK InsightToolkit',
     url=r'https://itk.org/',
     install_requires=[
-        r'itk>=5.0.1'
+        r'itk>=5.2rc3'
     ]
     )

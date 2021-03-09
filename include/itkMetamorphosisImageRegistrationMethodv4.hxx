@@ -1,6 +1,6 @@
 /*=========================================================================
  *
- *  Copyright Insight Software Consortium
+ *  Copyright NumFOCUS
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -296,7 +296,7 @@ Initialize()
     duplicator->SetInputImage(m_MovingMaskImage);
     duplicator->Update();
 
-    m_ForwardMaskImage = duplicator->GetModifiableOutput(); // M(1) = M_0
+    m_ForwardMaskImage = duplicator->GetOutput(); // M(1) = M_0
   }
 
   // Initialize fixed mask M_1
