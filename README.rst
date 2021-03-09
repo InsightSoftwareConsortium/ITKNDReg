@@ -1,9 +1,9 @@
 ITKNDReg
 ========
 
-.. image:: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_apis/build/status/InsightSoftwareConsortium.ITKNDReg?branchName=master
-    :target: https://dev.azure.com/InsightSoftwareConsortium/ITKModules/_build?definitionId=15
-    :alt: Build status
+.. image:: https://github.com/InsightSoftwareConsortium/ITKNDReg/actions/workflows/build-test-package.yml/badge.svg
+    :target: https://github.com/InsightSoftwareConsortium/ITKNDReg/actions/workflows/build-test-package.yml
+    :alt: Build, test, package
 
 .. image:: https://img.shields.io/pypi/v/itk-ndreg.svg
     :target: https://pypi.python.org/pypi/itk-ndreg
